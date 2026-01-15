@@ -21,7 +21,7 @@ export function authMiddleware(
   try {
     const payload = verifyToken(token);
     req.user = { userId: payload.userId, email: payload.email };
-    next();
+    return next();
   } catch {
     return res.status(401).json({ message: 'Invalid token' });
   }
