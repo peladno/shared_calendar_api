@@ -1,6 +1,6 @@
-import { prisma } from '../utils/prisma.utils.js';
-import { hashPassword, comparePassword } from '../utils/password.utils.js';
-import { signToken } from '../utils/jwt.utils.js';
+import { hashPassword, comparePassword } from '../utils/password.utils';
+import { signToken } from '../utils/jwt.utils';
+import { prisma } from '../utils/prisma.utils';
 
 export class AuthService {
   async register(email: string, username: string, password: string) {
