@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { prisma } from './utils/prisma.utils';
+import logger from './utils/logger.utils';
 
 import authRoutes from './routes/auth.routes';
 // import calendarsRoutes from './routes/calendars.routes';
@@ -15,8 +16,10 @@ app.use(express.json());
 app.get('/health', async (_req, res) => {
   try {
     await prisma.$queryRaw`SELECT 1`;
+    logger.debug('Health check passed');
     res.status(200).json({ status: 'ok' });
-  } catch {
+  } catch (error) {
+    logger.error('Health check failed', { error });
     res.status(500).json({ status: 'error' });
   }
 });
