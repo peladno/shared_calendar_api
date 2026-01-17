@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
@@ -13,21 +7,20 @@ datasource db {
   provider = "postgresql"
 }
 
-
 model User {
-  id        String    @id @default(uuid())
-  email     String    @unique
-  username  String    @unique
-  password  String
-  fullName  String?
-  avatarUrl String?
-  calendarsOwned  Calendar[] @relation("CalendarsOwned")
-  memberships     CalendarMember[]
-  eventsCreated   Event[] @relation("EventsCreated")
-  comments        Comment[]
-  notifications   Notification[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String           @id @default(uuid())
+  email          String           @unique
+  username       String           @unique
+  password       String
+  fullName       String?
+  avatarUrl      String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  calendarsOwned Calendar[]       @relation("CalendarsOwned")
+  memberships    CalendarMember[]
+  comments       Comment[]
+  eventsCreated  Event[]          @relation("EventsCreated")
+  notifications  Notification[]
 }
 
 model Calendar {
@@ -35,54 +28,46 @@ model Calendar {
   name        String
   description String?
   color       String
-  isShared    Boolean @default(false)
+  isShared    Boolean          @default(false)
   ownerId     String
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
   owner       User             @relation("CalendarsOwned", fields: [ownerId], references: [id])
   members     CalendarMember[]
   events      Event[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 }
 
 model CalendarMember {
-  id         String   @id @default(uuid())
+  id         String       @id @default(uuid())
   calendarId String
   userId     String
   role       CalendarRole
-  joinedAt   DateTime @default(now())
-
-  calendar   Calendar @relation(fields: [calendarId], references: [id])
-  user       User     @relation(fields: [userId], references: [id])
+  joinedAt   DateTime     @default(now())
+  calendar   Calendar     @relation(fields: [calendarId], references: [id])
+  user       User         @relation(fields: [userId], references: [id])
 
   @@unique([calendarId, userId])
 }
 
-enum CalendarRole {
-  ADMIN
-  EDITOR
-  VIEWER
-}
-
 model Event {
-  id          String    @id @default(uuid())
+  id          String     @id @default(uuid())
   title       String
   description String?
   startTime   DateTime
   endTime     DateTime
-  isAllDay    Boolean   @default(false)
+  isAllDay    Boolean    @default(false)
   location    String?
   color       String?
-  isRecurring Boolean   @default(false)
+  isRecurring Boolean    @default(false)
   recurrence  String?
   calendarId  String
   creatorId   String
-
-  calendar    Calendar  @relation(fields: [calendarId], references: [id])
-  creator     User      @relation("EventsCreated", fields: [creatorId], references: [id])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
   comments    Comment[]
+  calendar    Calendar   @relation(fields: [calendarId], references: [id])
+  creator     User       @relation("EventsCreated", fields: [creatorId], references: [id])
   reminders   Reminder[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 }
 
 model Comment {
@@ -90,18 +75,18 @@ model Comment {
   content   String
   eventId   String
   userId    String
-  event     Event    @relation(fields: [eventId], references: [id])
-  user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  event     Event    @relation(fields: [eventId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Reminder {
   id        String   @id @default(uuid())
   minutes   Int
   eventId   String
-  event     Event    @relation(fields: [eventId], references: [id])
   createdAt DateTime @default(now())
+  event     Event    @relation(fields: [eventId], references: [id])
 }
 
 model Notification {
@@ -111,8 +96,14 @@ model Notification {
   message   String
   isRead    Boolean          @default(false)
   userId    String
+  createdAt DateTime         @default(now())
   user      User             @relation(fields: [userId], references: [id])
-  createdAt DateTime @default(now())
+}
+
+enum CalendarRole {
+  ADMIN
+  EDITOR
+  VIEWER
 }
 
 enum NotificationType {
