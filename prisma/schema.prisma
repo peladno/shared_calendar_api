@@ -27,7 +27,7 @@ model Calendar {
   id          String           @id @default(uuid())
   name        String
   description String?
-  color       String
+  color       String?
   isShared    Boolean          @default(false)
   ownerId     String
   createdAt   DateTime         @default(now())
