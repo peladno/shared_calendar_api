@@ -7,12 +7,13 @@ import authRoutes from './routes/auth.routes';
 // import calendarsRoutes from './routes/calendars.routes';
 // import eventsRoutes from './routes/events.routes';
 // import usersRoutes from './routes/users.routes';
-import { errorMiddleware } from './middleware/error.middleware';
+import { errorHandler, errorMiddleware } from './middleware/error.middleware';
 import { configDotenv } from 'dotenv';
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
 configDotenv();
 
 app.get('/health', async (_req, res) => {
@@ -32,5 +33,6 @@ app.use('/api/auth', authRoutes);
 // app.use('/api/users', usersRoutes);
 
 app.use(errorMiddleware);
+app.use(errorHandler);
 
 export default app;

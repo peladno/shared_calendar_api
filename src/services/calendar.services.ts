@@ -1,37 +1,41 @@
 import { prisma } from '../utils/prisma.utils';
 
-export const calendarsService = {
-  getAllByUser: async (userId: string) => {
+export class CalendarsService {
+  async getAllByUser(userId: string) {
     return prisma.calendar.findMany({
       where: { ownerId: userId },
     });
-  },
+  }
 
-  getById: async (id: string, userId: string) => {
+  async getById(id: string, userId: string) {
     return prisma.calendar.findFirst({
       where: { id, ownerId: userId },
     });
-  },
+  }
 
-  create: async (userId: string, data: { name: string }) => {
+  async create(
+    userId: string,
+    data: { name: string; color?: string; description?: string },
+  ) {
     return prisma.calendar.create({
       data: {
         name: data.name,
+        description: data.description ?? null,
         ownerId: userId,
       },
     });
-  },
+  }
 
-  update: async (id: string, userId: string, data: any) => {
+  async update(id: string, userId: string, data: any) {
     return prisma.calendar.updateMany({
       where: { id, ownerId: userId },
       data,
     });
-  },
+  }
 
-  remove: async (id: string, userId: string) => {
+  async remove(id: string, userId: string) {
     return prisma.calendar.deleteMany({
       where: { id, ownerId: userId },
     });
-  },
-};
+  }
+}
