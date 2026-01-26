@@ -3,12 +3,16 @@ import cors from 'cors';
 import { prisma } from './utils/prisma.utils';
 import logger from './utils/logger.utils';
 
-import authRoutes from './routes/auth.routes';
 // import calendarsRoutes from './routes/calendars.routes';
 // import eventsRoutes from './routes/events.routes';
 // import usersRoutes from './routes/users.routes';
-import { errorHandler, errorMiddleware } from './middleware/error.middleware';
+
 import { configDotenv } from 'dotenv';
+import authRoutes from './api/routes/auth.routes';
+import {
+  errorHandler,
+  errorMiddleware,
+} from './api/middleware/error.middleware';
 
 const app = express();
 app.use(cors());
@@ -26,6 +30,8 @@ app.get('/health', async (_req, res) => {
     res.status(500).json({ status: 'error' });
   }
 });
+
+console.log('JWT_SECRET:', process.env.JWT_SECRET);
 
 app.use('/api/auth', authRoutes);
 // app.use('/api/calendars', calendarsRoutes);

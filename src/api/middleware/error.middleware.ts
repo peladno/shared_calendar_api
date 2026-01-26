@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
-import logger from '../utils/logger.utils';
-import { AppError } from '../utils/error.utils';
+import logger from '../../utils/logger.utils';
+import { AppError } from '../../utils/error.utils';
 
 export function errorMiddleware(
   err: any,
