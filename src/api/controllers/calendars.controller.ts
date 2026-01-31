@@ -3,7 +3,6 @@ import { Response, NextFunction } from 'express';
 import { CalendarService } from '../../core/services/calendar.service';
 import { PrismaCalendarRepository } from '../../infrastructure/repositories/calendar.prisma.repository';
 import { CreateCalendarDTO } from '../../core/dto/calendar/create-calendar.dto';
-import { LoginDTO } from '../../core/dto/auth/login.dto';
 import { AuthResponseDTO } from '../../core/dto/auth/auth-response.dto';
 
 export class CalendarsController {
