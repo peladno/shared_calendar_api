@@ -1,30 +1,56 @@
 import { CreateCalendarDTO } from '../../core/dto/calendar/create-calendar.dto';
 import { CalendarRepository } from '../../core/interfaces/calendar.repository';
 import { prisma } from '../../utils/prisma.utils';
+import { Calendar } from '../../core/entities/calendar.entity';
+import { Calendar as PrismaCalendar } from '../../../generated/prisma/client';
 
 export class PrismaCalendarRepository implements CalendarRepository {
-  findAllByUser(userId: string) {
-    return prisma.calendar.findMany({ where: { ownerId: userId } });
+  private toEntity(c: PrismaCalendar): Calendar {
+    return new Calendar(
+      c.id,
+      c.name,
+      c.ownerId,
+      c.description,
+      c.color,
+      c.isShared,
+      c.createdAt,
+      c.updatedAt,
+    );
   }
 
-  findById(id: string, userId: string) {
-    return prisma.calendar.findFirst({ where: { id, ownerId: userId } });
+  async findAllByUser(userId: string): Promise<Calendar[]> {
+    const calendars = await prisma.calendar.findMany({
+      where: { ownerId: userId },
+    });
+    return calendars.map((c) => this.toEntity(c));
   }
 
-  create(userId: string, data: CreateCalendarDTO) {
-    return prisma.calendar.create({
+  async findById(id: string, userId: string): Promise<Calendar | null> {
+    const calendar = await prisma.calendar.findFirst({
+      where: { id, ownerId: userId },
+    });
+    return calendar ? this.toEntity(calendar) : null;
+  }
+
+  async create(userId: string, data: CreateCalendarDTO): Promise<Calendar> {
+    const calendar = await prisma.calendar.create({
       data: { ...data, ownerId: userId },
     });
+    return this.toEntity(calendar);
   }
 
-  update(id: string, userId: string, data: any) {
+  async update(
+    id: string,
+    userId: string,
+    data: any,
+  ): Promise<{ count: number }> {
     return prisma.calendar.updateMany({
       where: { id, ownerId: userId },
       data,
     });
   }
 
-  remove(id: string, userId: string) {
+  async remove(id: string, userId: string): Promise<{ count: number }> {
     return prisma.calendar.deleteMany({
       where: { id, ownerId: userId },
     });

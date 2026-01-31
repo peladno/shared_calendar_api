@@ -39,7 +39,7 @@ export class AuthService {
     const user = await this.repo.findByEmail(data.email);
     if (!user) throw new AppError(401, 'Invalid credentials');
 
-    const valid = await bcrypt.compare(data.password, user.password);
+    const valid = await bcrypt.compare(data.password, user.passwordHash);
     if (!valid) throw new AppError(401, 'Invalid credentials');
 
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
@@ -59,6 +59,6 @@ export class AuthService {
   }
 
   async me(userId: string) {
-    return this.repo.findByEmail(userId);
+    return this.repo.findById(userId);
   }
 }

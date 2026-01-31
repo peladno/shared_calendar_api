@@ -1,12 +1,12 @@
 import { UpdateCalendarDTO } from './../../core/dto/calendar/update-calendar.dto';
 import { Response, NextFunction } from 'express';
 import { CalendarService } from '../../core/services/calendar.service';
-import { PrismaCalendarRepository } from '../../infrastructure/repositories/calendar.prisma.repository';
+// import { PrismaCalendarRepository } from '../../infrastructure/repositories/calendar.prisma.repository';
 import { CreateCalendarDTO } from '../../core/dto/calendar/create-calendar.dto';
 import { AuthResponseDTO } from '../../core/dto/auth/auth-response.dto';
 
 export class CalendarsController {
-  private service = new CalendarService(new PrismaCalendarRepository());
+  constructor(private service: CalendarService) {}
 
   async getAll(
     req: { body: AuthResponseDTO },

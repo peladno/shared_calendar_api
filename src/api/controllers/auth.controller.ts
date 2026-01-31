@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express';
-import { PrismaAuthRepository } from '../../infrastructure/repositories/auth.prisma.repository';
+// import { PrismaAuthRepository } from '../../infrastructure/repositories/auth.prisma.repository';
 import { AuthService } from '../../core/services/auth.service';
 import { RegisterDTO } from '../../core/dto/auth/register.dto';
 import { LoginDTO } from '../../core/dto/auth/login.dto';
@@ -7,7 +7,7 @@ import logger from '../../utils/logger.utils';
 import { AuthResponseDTO } from '../../core/dto/auth/auth-response.dto';
 
 export class AuthController {
-  private service = new AuthService(new PrismaAuthRepository());
+  constructor(private service: AuthService) {}
 
   async register(
     req: { body: RegisterDTO },

@@ -1,4 +1,4 @@
-import { Calendar } from '../../../generated/prisma/client';
+import { Calendar } from '../entities/calendar.entity';
 
 export interface CalendarRepository {
   findAllByUser(userId: string): Promise<Calendar[]>;

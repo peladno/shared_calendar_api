@@ -1,12 +1,16 @@
 import { Router } from 'express';
 
-import { AuthController } from '../controllers/auth.controllers';
+import { AuthController } from '../controllers/auth.controller';
 import { loginSchema, registerSchema } from '../../validators/auth.validators';
 import { validateBody } from '../middleware/validate.middleware';
+import { PrismaAuthRepository } from '../../infrastructure/repositories/auth.prisma.repository';
+import { AuthService } from '../../core/services/auth.service';
 //import { authMiddleware } from '../middleware/auth.middleware';
 
 const router = Router();
-const controller = new AuthController();
+const repo = new PrismaAuthRepository();
+const service = new AuthService(repo);
+const controller = new AuthController(service);
 
 router.post(
   '/register',
