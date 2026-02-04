@@ -3,7 +3,7 @@ import { Response, NextFunction } from 'express';
 import { AuthService } from '../../core/services/auth.service';
 import { RegisterDTO } from '../../core/dto/auth/register.dto';
 import { LoginDTO } from '../../core/dto/auth/login.dto';
-import logger from '../../utils/logger.utils';
+import logger from '../../infrastructure/logger/logger.utils';
 import { AuthResponseDTO } from '../../core/dto/auth/auth-response.dto';
 
 export class AuthController {

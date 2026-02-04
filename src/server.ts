@@ -1,5 +1,5 @@
 import app from './app';
-import logger from './utils/logger.utils';
+import logger from './infrastructure/logger/logger.utils';
 
 import { prisma } from './utils/prisma.utils';
 

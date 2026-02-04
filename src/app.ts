@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { prisma } from './utils/prisma.utils';
-import logger from './utils/logger.utils';
+import logger from './infrastructure/logger/logger.utils';
 
 // import calendarsRoutes from './routes/calendars.routes';
 // import eventsRoutes from './routes/events.routes';

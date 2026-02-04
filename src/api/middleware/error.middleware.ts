@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
-import logger from '../../utils/logger.utils';
+import logger from '../../infrastructure/logger/logger.utils';
 import { AppError } from '../../utils/error.utils';
 
 export function errorMiddleware(

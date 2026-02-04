@@ -18,3 +18,5 @@ yarn-debug.log*
 
 # OS
 .DS_Store
+
+/generated/prisma

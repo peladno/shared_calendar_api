@@ -2,7 +2,7 @@ import { Response, NextFunction } from 'express';
 import { verifyToken } from '../../utils/jwt.utils';
 import { AuthRequest } from './auth.middleware.types';
 import { AppError } from '../../utils/error.utils';
-import logger from '../../utils/logger.utils';
+import logger from '../../infrastructure/logger/logger.utils';
 
 export function authMiddleware(
   req: AuthRequest,
