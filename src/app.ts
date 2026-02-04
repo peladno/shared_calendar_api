@@ -31,8 +31,6 @@ app.get('/health', async (_req, res) => {
   }
 });
 
-console.log('JWT_SECRET:', process.env.JWT_SECRET);
-
 app.use('/api/auth', authRoutes);
 // app.use('/api/calendars', calendarsRoutes);
 // app.use('/api/events', eventsRoutes);
