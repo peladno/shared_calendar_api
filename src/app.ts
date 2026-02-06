@@ -3,12 +3,13 @@ import cors from 'cors';
 import { prisma } from './utils/prisma.utils';
 import logger from './infrastructure/logger/logger.utils';
 
-// import calendarsRoutes from './routes/calendars.routes';
 // import eventsRoutes from './routes/events.routes';
 // import usersRoutes from './routes/users.routes';
 
 import { configDotenv } from 'dotenv';
 import authRoutes from './api/routes/auth.routes';
+import calendarsRoutes from './api/routes/calendar.routes';
+
 import {
   errorHandler,
   errorMiddleware,
@@ -32,7 +33,7 @@ app.get('/health', async (_req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
-// app.use('/api/calendars', calendarsRoutes);
+app.use('/api/calendars', calendarsRoutes);
 // app.use('/api/events', eventsRoutes);
 // app.use('/api/users', usersRoutes);
 
