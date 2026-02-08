@@ -25,11 +25,11 @@ export function authMiddleware(
     const payload = verifyToken(token);
 
     req.user = {
-      userId: payload.user.id,
-      email: payload.user.email,
+      id: payload.id,
+      email: payload.email,
     };
 
-    logger.debug('Authenticated request', { id: payload.user.id });
+    logger.debug('Authenticated request', { id: payload.id });
 
     next();
   } catch (err) {

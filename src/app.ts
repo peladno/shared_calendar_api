@@ -9,6 +9,7 @@ import logger from './infrastructure/logger/logger.utils';
 import { configDotenv } from 'dotenv';
 import authRoutes from './api/routes/auth.routes';
 import calendarsRoutes from './api/routes/calendar.routes';
+import eventsRoutes from './api/routes/event.routes';
 
 import {
   errorHandler,
@@ -34,6 +35,9 @@ app.get('/health', async (_req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/calendars', calendarsRoutes);
+app.use('/api/events', eventsRoutes);
+// app.use('/api/notifications', sseRoutes); // SSE route currently commented out or removed by user, keeping consistency or re-adding if needed?
+// The user removed it in previous turn. I will just add eventsRoutes.
 // app.use('/api/events', eventsRoutes);
 // app.use('/api/users', usersRoutes);
 

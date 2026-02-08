@@ -4,7 +4,8 @@ import { AuthService } from '../../core/services/auth.service';
 import { RegisterDTO } from '../../core/dto/auth/register.dto';
 import { LoginDTO } from '../../core/dto/auth/login.dto';
 import logger from '../../infrastructure/logger/logger.utils';
-import { AuthResponseDTO } from '../../core/dto/auth/auth-response.dto';
+
+import { AuthRequest } from '../middleware/auth.middleware.types';
 
 export class AuthController {
   constructor(private service: AuthService) {}
@@ -41,13 +42,13 @@ export class AuthController {
     }
   }
 
-  async me(req: { body: AuthResponseDTO }, res: Response, next: NextFunction) {
+  async me(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const userId = req.body.user.id;
+      const id = req.user.id;
 
-      logger.debug('User profile requested', { userId });
+      logger.debug('User profile requested', { id });
 
-      const user = await this.service.me(userId);
+      const user = await this.service.me(id);
 
       res.json({ success: true, data: user });
     } catch (err) {

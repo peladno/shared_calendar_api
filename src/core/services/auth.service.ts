@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import { signToken } from '../../utils/jwt.utils';
 import { AuthResponseDTO } from '../dto/auth/auth-response.dto';
 import { AuthRepository } from '../interfaces/auth.repository';
 import { AppError } from '../../utils/error.utils';
@@ -10,20 +10,22 @@ export class AuthService {
   constructor(private repo: AuthRepository) {}
 
   async register(data: RegisterDTO): Promise<AuthResponseDTO> {
-    const existing = await this.repo.findByEmail(data.email);
+    const email = data.email.trim();
+    const password = data.password.trim();
+    const username = data.username.trim();
+
+    const existing = await this.repo.findByEmail(email);
     if (existing) throw new AppError(400, 'Email already registered');
 
-    const hashed = await bcrypt.hash(data.password, 10);
+    const hashed = await bcrypt.hash(password, 10);
 
     const user = await this.repo.createUser({
-      email: data.email,
-      username: data.username,
+      email,
+      username,
       password: hashed,
     });
 
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
-      expiresIn: '7d',
-    });
+    const token = signToken({ id: user.id, email: user.email });
 
     return {
       token,
@@ -36,15 +38,18 @@ export class AuthService {
   }
 
   async login(data: LoginDTO): Promise<AuthResponseDTO> {
-    const user = await this.repo.findByEmail(data.email);
+    const email = data.email.trim();
+    const password = data.password.trim();
+
+    const user = await this.repo.findByEmail(email);
+    console.log('User', user);
     if (!user) throw new AppError(401, 'Invalid credentials');
 
-    const valid = await bcrypt.compare(data.password, user.passwordHash);
+    const valid = await bcrypt.compare(password, user.passwordHash);
+    console.log('Valid', valid);
     if (!valid) throw new AppError(401, 'Invalid credentials');
 
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
-      expiresIn: '7d',
-    });
+    const token = signToken({ id: user.id, email: user.email });
 
     return {
       token,
@@ -58,7 +63,7 @@ export class AuthService {
     };
   }
 
-  async me(userId: string) {
-    return this.repo.findById(userId);
+  async me(id: string) {
+    return this.repo.findById(id);
   }
 }

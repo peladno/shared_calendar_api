@@ -9,7 +9,7 @@ export class CalendarsController {
 
   async getAll(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const calendars = await this.service.getAll(req.user.userId);
+      const calendars = await this.service.getAll(req.user.id);
       res.json({ success: true, data: calendars });
     } catch (err) {
       next(err);
@@ -19,7 +19,7 @@ export class CalendarsController {
   async getOne(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { id } = req.params as { id: string };
-      const calendar = await this.service.getOne(id, req.user.userId);
+      const calendar = await this.service.getOne(id, req.user.id);
       res.json({ success: true, data: calendar });
     } catch (err) {
       next(err);
@@ -29,7 +29,7 @@ export class CalendarsController {
   async create(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const body = req.body as CreateCalendarDTO;
-      const calendar = await this.service.create(req.user.userId, body);
+      const calendar = await this.service.create(req.user.id, body);
       res.status(201).json({ success: true, data: calendar });
     } catch (err) {
       next(err);
@@ -40,7 +40,7 @@ export class CalendarsController {
     try {
       const { id } = req.params as { id: string };
       const body = req.body as UpdateCalendarDTO;
-      await this.service.update(id, req.user.userId, body);
+      await this.service.update(id, req.user.id, body);
       res.json({ success: true, message: 'Updated' });
     } catch (err) {
       next(err);
@@ -50,7 +50,7 @@ export class CalendarsController {
   async remove(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { id } = req.params as { id: string };
-      await this.service.remove(id, req.user.userId);
+      await this.service.remove(id, req.user.id);
       res.json({ success: true, message: 'Deleted' });
     } catch (err) {
       next(err);
