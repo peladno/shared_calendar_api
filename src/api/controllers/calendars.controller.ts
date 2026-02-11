@@ -56,4 +56,36 @@ export class CalendarsController {
       next(err);
     }
   }
+
+  async share(req: AuthRequest, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params as { id: string };
+      const { email } = req.body as { email: string };
+      const member = await this.service.shareCalendar(id, req.user.id, email);
+      res.json({ success: true, data: member });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async updateMemberRole(req: AuthRequest, res: Response, next: NextFunction) {
+    try {
+      const { id, userId } = req.params as { id: string; userId: string };
+      const { role } = req.body as { role: string };
+      await this.service.updateMemberRole(id, req.user.id, userId, role);
+      res.json({ success: true, message: 'Member role updated' });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async removeMember(req: AuthRequest, res: Response, next: NextFunction) {
+    try {
+      const { id, userId } = req.params as { id: string; userId: string };
+      await this.service.removeMember(id, req.user.id, userId);
+      res.json({ success: true, message: 'Member removed' });
+    } catch (err) {
+      next(err);
+    }
+  }
 }

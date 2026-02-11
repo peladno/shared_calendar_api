@@ -10,18 +10,14 @@ export class AuthService {
   constructor(private repo: AuthRepository) {}
 
   async register(data: RegisterDTO): Promise<AuthResponseDTO> {
-    const email = data.email.trim();
-    const password = data.password.trim();
-    const username = data.username.trim();
-
-    const existing = await this.repo.findByEmail(email);
+    const existing = await this.repo.findByEmail(data.email);
     if (existing) throw new AppError(400, 'Email already registered');
 
-    const hashed = await bcrypt.hash(password, 10);
+    const hashed = await bcrypt.hash(data.password, 10);
 
     const user = await this.repo.createUser({
-      email,
-      username,
+      email: data.email,
+      username: data.username,
       password: hashed,
     });
 
@@ -38,14 +34,11 @@ export class AuthService {
   }
 
   async login(data: LoginDTO): Promise<AuthResponseDTO> {
-    const email = data.email.trim();
-    const password = data.password.trim();
-
-    const user = await this.repo.findByEmail(email);
+    const user = await this.repo.findByEmail(data.email);
     console.log('User', user);
     if (!user) throw new AppError(401, 'Invalid credentials');
 
-    const valid = await bcrypt.compare(password, user.passwordHash);
+    const valid = await bcrypt.compare(data.password, user.passwordHash);
     console.log('Valid', valid);
     if (!valid) throw new AppError(401, 'Invalid credentials');
 

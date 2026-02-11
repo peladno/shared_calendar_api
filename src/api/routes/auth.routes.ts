@@ -12,16 +12,19 @@ const repo = new PrismaAuthRepository();
 const service = new AuthService(repo);
 const controller = new AuthController(service);
 
+// POST /api/auth/register
 router.post(
   '/register',
   validateBody(registerSchema),
   controller.register.bind(controller),
 );
+// POST /api/auth/login
 router.post(
   '/login',
   validateBody(loginSchema),
   controller.login.bind(controller),
 );
+// GET /api/auth/me
 router.get(
   '/me',
   authMiddleware as unknown as RequestHandler,

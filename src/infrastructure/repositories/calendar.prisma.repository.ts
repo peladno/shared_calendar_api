@@ -55,4 +55,45 @@ export class PrismaCalendarRepository implements CalendarRepository {
       where: { id, ownerId: userId },
     });
   }
+
+  async addMember(
+    calendarId: string,
+    userId: string,
+    role: any,
+  ): Promise<any> {
+    return prisma.calendarMember.create({
+      data: {
+        calendarId,
+        userId,
+        role,
+      },
+    });
+  }
+
+  async updateMemberRole(
+    calendarId: string,
+    userId: string,
+    role: any,
+  ): Promise<any> {
+    return prisma.calendarMember.update({
+      where: {
+        calendarId_userId: {
+          calendarId,
+          userId,
+        },
+      },
+      data: { role },
+    });
+  }
+
+  async removeMember(calendarId: string, userId: string): Promise<any> {
+    return prisma.calendarMember.delete({
+      where: {
+        calendarId_userId: {
+          calendarId,
+          userId,
+        },
+      },
+    });
+  }
 }

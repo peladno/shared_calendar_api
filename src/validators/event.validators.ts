@@ -1,16 +1,16 @@
 import { z } from 'zod';
 
 export const createEventSchema = z.object({
-  title: z.string().min(1, 'Title is required'),
-  description: z.string().optional(),
-  startTime: z.string().datetime(),
-  endTime: z.string().datetime(),
+  title: z.string().trim().min(1, 'Title is required'),
+  description: z.string().trim().optional(),
+  startTime: z.iso.datetime(),
+  endTime: z.iso.datetime(),
   isAllDay: z.boolean().optional(),
-  location: z.string().optional(),
-  color: z.string().optional(),
+  location: z.string().trim().optional(),
+  color: z.string().trim().optional(),
   isRecurring: z.boolean().optional(),
-  recurrence: z.string().optional(),
-  calendarId: z.string().uuid(),
+  recurrence: z.string().trim().optional(),
+  calendarId: z.uuid(),
 }).refine((data) => {
   const start = new Date(data.startTime);
   const end = new Date(data.endTime);
@@ -21,14 +21,14 @@ export const createEventSchema = z.object({
 });
 
 export const updateEventSchema = z.object({
-  title: z.string().min(1).optional(),
-  description: z.string().optional(),
-  startTime: z.string().datetime().optional(),
-  endTime: z.string().datetime().optional(),
+  title: z.string().trim().min(1).optional(),
+  description: z.string().trim().optional(),
+  startTime: z.iso.datetime().optional(),
+  endTime: z.iso.datetime().optional(),
   isAllDay: z.boolean().optional(),
-  location: z.string().optional(),
-  color: z.string().optional(),
+  location: z.string().trim().optional(),
+  color: z.string().trim().optional(),
   isRecurring: z.boolean().optional(),
-  recurrence: z.string().optional(),
-  calendarId: z.string().uuid().optional(),
+  recurrence: z.string().trim().optional(),
+  calendarId: z.uuid()
 });
