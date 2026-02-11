@@ -1,5 +1,5 @@
-import { Event } from '../entities/event.entity';
 import { CreateEventDTO } from '../dto/event/create-event.dto';
+import { Event } from '../entities/event.entity';
 import { UpdateEventDTO } from '../dto/event/update-event.dto';
 
 export interface EventRepository {

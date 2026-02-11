@@ -1,8 +1,8 @@
 import { Response, NextFunction } from 'express';
+import { AuthRequest } from '../middleware/auth.middleware.types';
 import { EventService } from '../../core/services/event.service';
 import { CreateEventDTO } from '../../core/dto/event/create-event.dto';
 import { UpdateEventDTO } from '../../core/dto/event/update-event.dto';
-import { AuthRequest } from '../middleware/auth.middleware.types';
 
 export class EventsController {
   constructor(private service: EventService) {}
@@ -14,7 +14,7 @@ export class EventsController {
         res.status(400).json({ success: false, message: 'calendarId query parameter is required' });
         return;
       }
-      const events = await this.service.getAll(calendarId);
+      const events = await this.service.getAll(calendarId, req.user.id);
       res.json({ success: true, data: events });
     } catch (err) {
       next(err);
@@ -24,7 +24,7 @@ export class EventsController {
   async getOne(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { id } = req.params as { id: string };
-      const event = await this.service.getOne(id);
+      const event = await this.service.getOne(id, req.user.id);
       res.json({ success: true, data: event });
     } catch (err) {
       next(err);

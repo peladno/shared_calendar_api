@@ -1,17 +1,17 @@
 import { Router, RequestHandler } from 'express';
 import { EventsController } from '../controllers/events.controller';
-import { EventService } from '../../core/services/event.service';
-import { PrismaEventRepository } from '../../infrastructure/repositories/event.prisma.repository';
 import { authMiddleware } from '../middleware/auth.middleware';
 import { validateBody } from '../middleware/validate.middleware';
-import {
-  createEventSchema,
-  updateEventSchema,
-} from '../../validators/event.validators';
+import { createEventSchema, updateEventSchema } from '../../validators/event.validators';
+import { PrismaEventRepository } from '../../infrastructure/repositories/event.prisma.repository';
+import { PrismaCalendarRepository } from '../../infrastructure/repositories/calendar.prisma.repository';
+import { EventService } from '../../core/services/event.service';
+
 
 const router = Router();
 const repo = new PrismaEventRepository();
-const service = new EventService(repo);
+const calendarRepo = new PrismaCalendarRepository();
+const service = new EventService(repo, calendarRepo);
 const controller = new EventsController(service);
 
 router.use(authMiddleware as RequestHandler);
